@@ -3,7 +3,7 @@ import { json2ts } from 'json-ts';
 import { JsonTsOptions } from 'json-ts/src/index';
 import { createFile } from './utils/file';
 
-export function createInterface(name: string, josn: string) {
+export function generateInterface(name: string, josn: string): string {
   const option: JsonTsOptions = {
     prefix: 'I',
     rootName: name,
@@ -12,5 +12,5 @@ export function createInterface(name: string, josn: string) {
   let textInterface: string = json2ts(josn, option);
   textInterface             = textInterface.replace(/interface/gi, 'export interface');
 
-  createFile('/out/interface', name, textInterface);
+  return textInterface;
 }

@@ -1,6 +1,6 @@
 import axios, { AxiosPromise } from 'axios';
 
-const API_URL          = 'https://dev.tasker.cronix.ms/api';
+const API_URL          = 'https://dev.emailer-electron-laravel.cronix.life/api/v1';
 axios.defaults.baseURL = API_URL;
 axios.defaults.timeout = 5000;
 

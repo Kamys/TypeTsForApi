@@ -10,7 +10,7 @@ export function createFile(path: string, fileName: string, text: string) {
   createFullPath(fullPath);
 
   console.log('create file = ', fileName);
-  const stream = fs.createWriteStream(`${fullPath}/${fileName}.ts`);
+  const stream = fs.createWriteStream(`${fullPath}/${fileName}`);
   stream.once('open', () => {
     stream.write(text);
     stream.end();

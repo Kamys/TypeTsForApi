@@ -1,26 +1,30 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { Hoplite } from './Hoplite';
 import { AxiosWrapper } from './exampleOut/api/AxiosWrapper';
+import { createFile } from './utils/file';
 
 async function start() {
-  try {
-    const responseLogin = await AxiosWrapper.post('/login', {
-      email: 'airelle.leesa@0celot.com',
-      password: 'airelle.leesa@0celot.com'
-    });
-    axios.defaults.headers.common['authorization'] = `Bearer ${responseLogin.data.token}`;
-    responseLogin.data.token;
-    Hoplite.addType(responseLogin);
+  const axiosInstance = axios.create({
+    baseURL: 'https://dev.emailer-electron-laravel.cronix.life/api/v1',
+    timeout: 3000,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  });
 
-    const responseProjects = await AxiosWrapper.get('/projects');
-    Hoplite.addType(responseProjects);
+  axiosInstance.interceptors.response.use(Hoplite.responseHandler as any);
 
-    Hoplite.createApi();
-  } catch (e) {
-    debugger
-  }
+  let responseLogin: AxiosResponse<{ token: string }> = await axiosInstance.post('/login', {
+    'email': 'freidy.hanae@0ld0x.com',
+    'password': 'freidy.hanae@0ld0x.com'
+  });
+
+  axiosInstance.defaults.headers.common.authorization = `Bearer ${responseLogin.data.token}`;
+
+  await axiosInstance.get('/emails');
 }
 
-start();
-
+start()
+  .then(Hoplite.createApiInterface);

@@ -1,30 +1,40 @@
 import { AxiosResponse } from 'axios';
 
-import { createInterface } from './TemplateFactory';
-import { toCamelCase } from './utils/utils';
+import { generateInterface } from './TemplateFactory';
+import { extractInterfaceName } from './utils/text';
+import { createFile } from './utils/file';
 
-function extractInterfaceName(path: string) {
-  let interfaceName = path
-    .match('\\/[a-z]+')
-    .map(str => str.slice(1))
-    .join(' ');
-  return toCamelCase(interfaceName);
-}
 
 const responseList: AxiosResponse<any>[] = [];
 
-function addType(response: AxiosResponse<any>) {
+function responseHandler(response: AxiosResponse<object>) {
   responseList.push(response);
+  return response;
 }
 
-function createApi() {
+function convertResponseToJson() {
+  return JSON.stringify(responseList.map(response => ({
+    data: response.data,
+    config: response.config
+  })), null, 4);
+}
+
+function saveResponse() {
+  createFile('../out', 'Response.json', convertResponseToJson());
+}
+
+function createApiInterface() {
   responseList.map(response => {
-    const interfaceName = extractInterfaceName(response.request.path);
-    createInterface(interfaceName, JSON.stringify(response.data));
+    const interfaceName = extractInterfaceName(response.request.path.replace('/api/v1', ''));
+
+    let textInterface = generateInterface(interfaceName, JSON.stringify(response.data));
+
+    createFile('../out/interface', `${interfaceName}.ts`, textInterface);
   })
 }
 
 export const Hoplite = {
-  addType,
-  createApi,
+  responseHandler,
+  saveResponse,
+  createApiInterface,
 };
