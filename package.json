@@ -14,7 +14,7 @@
     "ts-node": "^7.0.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf ./build; tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clear:projetc": "rm -rf build node_modules"
   },

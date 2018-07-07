@@ -24,13 +24,20 @@ function saveResponse() {
 }
 
 function createApiInterface() {
+  console.log('Create interface');
   responseList.map(response => {
     const interfaceName = extractInterfaceName(response.request.path.replace('/api/v1', ''));
 
     let textInterface = generateInterface(interfaceName, JSON.stringify(response.data));
 
     createFile('../out/interface', `${interfaceName}.ts`, textInterface);
+    console.log(`--- ${interfaceName}`);
   })
+}
+
+function createApiMethod() {
+  console.log('Create interface');
+
 }
 
 export const Hoplite = {

@@ -24,6 +24,12 @@ async function start() {
   axiosInstance.defaults.headers.common.authorization = `Bearer ${responseLogin.data.token}`;
 
   await axiosInstance.get('/emails');
+
+  await axiosInstance.get('/images');
+
+  await axiosInstance.get('/layouts');
+
+  await axiosInstance.get('/profile');
 }
 
 start()

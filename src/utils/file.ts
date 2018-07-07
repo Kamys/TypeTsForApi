@@ -4,12 +4,10 @@ import * as path from 'path';
 const appDir = path.dirname(require.main.filename);
 
 export function createFile(path: string, fileName: string, text: string) {
-  console.log('appDir = ', appDir);
   let fullPath = `${appDir}/${path}`;
 
   createFullPath(fullPath);
 
-  console.log('create file = ', fileName);
   const stream = fs.createWriteStream(`${fullPath}/${fileName}`);
   stream.once('open', () => {
     stream.write(text);

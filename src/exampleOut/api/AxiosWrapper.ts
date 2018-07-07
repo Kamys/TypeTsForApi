@@ -1,29 +1,34 @@
 import axios, { AxiosPromise } from 'axios';
 
-const API_URL          = 'https://dev.emailer-electron-laravel.cronix.life/api/v1';
-axios.defaults.baseURL = API_URL;
-axios.defaults.timeout = 5000;
+const axiosInstance = axios.create({
+  baseURL: 'https://dev.emailer-electron-laravel.cronix.life/api/v1',
+  timeout: 3000,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+});
 
 function get(apiMethod: string, urlParams: { [key: string]: string | number } = {}): AxiosPromise<any> {
-  return axios.get(API_URL + apiMethod, {
+  return axiosInstance.get(apiMethod, {
     params: urlParams,
   });
 }
 
 function post(apiMethod: string, body: any = {}): AxiosPromise<any> {
-  return axios.post(API_URL + apiMethod,
+  return axiosInstance.post(apiMethod,
     body,
   );
 }
 
 function put(apiMethod: string, body: any = {}): AxiosPromise<any> {
-  return axios.put(API_URL + apiMethod,
+  return axiosInstance.put(apiMethod,
     body,
   );
 }
 
 function deleteRequest(apiMethod: string, body: any = {}): AxiosPromise<any> {
-  return axios.post(API_URL + apiMethod,
+  return axiosInstance.post(apiMethod,
     { ...body, _method: 'DELETE' },
   );
 }
