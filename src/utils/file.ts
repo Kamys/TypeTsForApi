@@ -1,11 +1,16 @@
-import * as fs from "fs";
+import * as fs from 'fs';
+import * as path from 'path';
+
+const appDir = path.dirname(require.main.filename);
 
 export function createFile(path: string, fileName: string, text: string) {
-  let fullName = `${__dirname}/${path}/${fileName}.ts`;
+  console.log('appDir = ', appDir);
+  let fullPath = `${appDir}/${path}`;
 
-  createFullPath(path);
+  createFullPath(fullPath);
 
-  const stream = fs.createWriteStream(fullName);
+  console.log('create file = ', fileName);
+  const stream = fs.createWriteStream(`${fullPath}/${fileName}.ts`);
   stream.once('open', () => {
     stream.write(text);
     stream.end();

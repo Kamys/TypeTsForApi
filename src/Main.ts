@@ -1,28 +1,26 @@
-import { AxiosResponse } from 'axios';
+import axios from 'axios';
 
-import { AxiosWrapper } from './AxiosWrapper';
-import { createInterface } from './TemplateFactory';
-import { toCamelCase } from './utils';
+import { Hoplite } from './Hoplite';
+import { AxiosWrapper } from './exampleOut/api/AxiosWrapper';
 
-(async function  () {
-  handlerResponse( await get('/posts/1'));
-})();
-
-async function get(method: string): Promise<AxiosResponse<any>> {
+async function start() {
   try {
-    return await AxiosWrapper.get(method);
+    const responseLogin = await AxiosWrapper.post('/login', {
+      email: 'airelle.leesa@0celot.com',
+      password: 'airelle.leesa@0celot.com'
+    });
+    axios.defaults.headers.common['authorization'] = `Bearer ${responseLogin.data.token}`;
+    responseLogin.data.token;
+    Hoplite.addType(responseLogin);
+
+    const responseProjects = await AxiosWrapper.get('/projects');
+    Hoplite.addType(responseProjects);
+
+    Hoplite.createApi();
   } catch (e) {
-    console.log(e);
+    debugger
   }
 }
 
-function handlerResponse(response: AxiosResponse<any>){
-  let match        = response.request.path.match('\\/[a-z]+');
-  let message      = match.map(str => str.slice(1)).join(' ');
-  let interfaceName = toCamelCase(message);
-
-  createInterface(interfaceName, JSON.stringify(response.data));
-}
-
-
+start();
 

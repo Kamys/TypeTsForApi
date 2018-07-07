@@ -6,14 +6,17 @@
   "dependencies": {
     "axios": "^0.18.0",
     "json-ts": "^1.6.4",
-    "mustache": "^2.3.0",
-    "template-file": "^3.0.1"
+    "mustache": "^2.3.0"
   },
   "devDependencies": {
-    "@types/node": "^10.3.4"
+    "@types/node": "^10.3.4",
+    "typescript": "^2.9.2",
+    "ts-node": "^7.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clear:projetc": "rm -rf build node_modules"
   },
   "author": "",
   "license": "ISC"

@@ -1,8 +1,7 @@
-import { renderString, renderTemplateFile } from 'template-file';
 import { json2ts } from 'json-ts';
 
 import { JsonTsOptions } from 'json-ts/src/index';
-import { createFile } from './fileUtils';
+import { createFile } from './utils/file';
 
 export function createInterface(name: string, josn: string) {
   const option: JsonTsOptions = {
