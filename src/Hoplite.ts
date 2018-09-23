@@ -5,43 +5,40 @@ import { extractInterfaceName } from './utils/text';
 import { createFile } from './utils/file';
 
 
-const responseList: AxiosResponse<any>[] = [];
+let allResponse = {};
 
 function responseHandler(response: AxiosResponse<object>) {
-  responseList.push(response);
-  return response;
+	const interfaceName = extractInterfaceName(response.request.path);
+	allResponse         = {
+		...allResponse,
+		[interfaceName]: response.data,
+	}
+	return response;
 }
 
 function convertResponseToJson() {
-  return JSON.stringify(responseList.map(response => ({
-    data: response.data,
-    config: response.config
-  })), null, 4);
+	return JSON.stringify(allResponse, null, 4);
 }
 
 function saveResponse() {
-  createFile('../out', 'Response.json', convertResponseToJson());
+	createFile('../out', 'Response.json', convertResponseToJson());
 }
 
 function createApiInterface() {
-  console.log('Create interface');
-  responseList.map(response => {
-    const interfaceName = extractInterfaceName(response.request.path.replace('/api/v1', ''));
+	console.log('Create interface');
+	let textInterface = generateInterface(JSON.stringify(allResponse));
 
-    let textInterface = generateInterface(interfaceName, JSON.stringify(response.data));
-
-    createFile('../out/interface', `${interfaceName}.ts`, textInterface);
-    console.log(`--- ${interfaceName}`);
-  })
+	createFile('../out/interface', `${'Interface'}.ts`, textInterface);
+	console.log(`--- ${'Interface'}`);
 }
 
 function createApiMethod() {
-  console.log('Create interface');
+	console.log('Create interface');
 
 }
 
 export const Hoplite = {
-  responseHandler,
-  saveResponse,
-  createApiInterface,
+	responseHandler,
+	saveResponse,
+	createApiInterface,
 };
